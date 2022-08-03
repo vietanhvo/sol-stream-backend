@@ -13,5 +13,5 @@ solana-client = "1.11.4"
 solana-account-decoder = "1.11.4"
 serde = "1.0.141"
 solana-sdk = "1.11.4"
-diesel = { version = "1.4.8", features = ["postgres"] }
+diesel = { version = "1.4.8", features = ["mysql"] }
 dotenv = "0.15.0"
