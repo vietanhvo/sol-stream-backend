@@ -8,8 +8,15 @@ mod solana;
 
 use diesel::prelude::*;
 use dotenv::dotenv;
-use rocket::{get, routes};
+use rocket::routes;
 use std::env;
+
+use solana::get_all_program_accounts;
+use solana::subscribe_to_program;
+
+use crate::models::Stream;
+use crate::routes::get_all_stream;
+use crate::routes::index;
 
 pub fn establish_connection() -> MysqlConnection {
     dotenv().ok();
@@ -20,23 +27,25 @@ pub fn establish_connection() -> MysqlConnection {
 
 #[rocket::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let program_accounts = get_all_program_accounts();
+    let conn = establish_connection();
+    for item in program_accounts.iter() {
+        let stream = Stream::new(item.0.to_string(), &item.1.data);
+        match stream {
+            Some(a) => Stream::insert_or_update(a, &conn),
+            _ => continue,
+        };
+    }
+
+    subscribe_to_program();
+
     let cors = rocket_cors::CorsOptions::default().to_cors()?;
 
-    rocket::build()
-        .mount("/", routes![index, route_with_pubkey])
+    let _rocket = rocket::build()
+        .mount("/", routes![index, get_all_stream])
         .attach(cors)
         .launch()
         .await?;
 
     Ok(())
-}
-
-#[get("/")]
-fn index() -> &'static str {
-    "Hello, world!"
-}
-
-#[get("/<pubkey>")]
-fn route_with_pubkey(pubkey: &str) -> String {
-    format!("Hello {}", pubkey)
 }

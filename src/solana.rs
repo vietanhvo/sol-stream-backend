@@ -6,7 +6,7 @@ use solana_sdk::{account::Account, pubkey::Pubkey};
 use crate::{establish_connection, models::Stream};
 
 pub fn get_all_program_accounts() -> Vec<(Pubkey, Account)> {
-    let program_pub_key = Pubkey::from_str("DcGPfiGbubEKh1EnQ86EdMvitjhrUo8fGSgvqtFG4A9t")
+    let program_pub_key = Pubkey::from_str("2aNCWuYSk5zz8gWWqUKGrxGTN9EHcP7orLvNjALjNoPm")
         .expect("program address invalid");
     let url = "https://api.devnet.solana.com".to_string();
     let client = RpcClient::new(url);
@@ -18,7 +18,7 @@ pub fn get_all_program_accounts() -> Vec<(Pubkey, Account)> {
 
 pub fn subscribe_to_program() {
     let url = "ws://api.devnet.solana.com".to_string();
-    let program_pub_key = Pubkey::from_str("DcGPfiGbubEKh1EnQ86EdMvitjhrUo8fGSgvqtFG4A9t")
+    let program_pub_key = Pubkey::from_str("2aNCWuYSk5zz8gWWqUKGrxGTN9EHcP7orLvNjALjNoPm")
         .expect("program address invalid");
 
     thread::spawn(move || loop {
