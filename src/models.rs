@@ -17,7 +17,7 @@ struct StreamData {
 
 #[derive(Queryable, Insertable, Serialize)]
 #[table_name = "streams"]
-struct Stream {
+pub struct Stream {
     pub pda_account: String,
     pub start_time: i64,
     pub end_time: i64,
